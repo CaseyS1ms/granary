@@ -11,6 +11,8 @@ class Settlement:
         self.food = food
         self.people = people
         self.tick = 0
+        self.deaths = 0
+        self.history = {"tick": [], "food": [], "population": [], "deaths": []}
 
 
     @property
@@ -28,6 +30,8 @@ class Settlement:
 
             if p.get_age_in_years(self.tick) > p.max_age:
                 p.alive = False
+                self.deaths += 1
+
                 continue
 
             if p.get_age_in_years(self.tick) >= MIN_WORKING_AGE:
@@ -40,6 +44,7 @@ class Settlement:
                 p.take_damage(STARVATION_DAMAGE_PER_TICK)
 
             if not p.alive:
+                self.deaths += 1
                 continue
             if self.food >= FOOD_PER_PERSON_PER_TICK:
                 self.food -= FOOD_PER_PERSON_PER_TICK
@@ -57,11 +62,21 @@ class Settlement:
 
 
 
+        self.plot()
 
         people = [p for p in self.people if p.alive] + newborns
         self.people = people
 
         self.tick += 1
+
+
+
+    def plot(self):
+        self.history["tick"].append(self.tick)
+        self.history["food"].append(self.food)
+        self.history["population"].append(self.population)
+        self.history["deaths"].append(self.deaths)
+
 
 
 

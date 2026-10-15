@@ -108,7 +108,7 @@ def test_settlement_produces_food():
         s.step()
         assert s.food > 0
 
-def test_settlement_produces_food_when_hungry():
+def test_settlement_doesnt_produce_food_when_hungry():
     s = Settlement(people = [Person(age = 20, gender = 1) for _ in range(1)], food = 0)
     s.people[0].hunger = 100
     for i in range(10):
@@ -138,11 +138,11 @@ def test_person_does_not_get_job_when_too_old():
 
 
 def test_long_run_test():
-    s = Settlement(people = [Person(age = RNG.randint(15,40), gender = RNG.randint(1,2)) for _ in range(1000)], food = 10000)
+    s = Settlement(people = [Person(age = RNG.randint(15,40), gender = RNG.randint(1,2)) for _ in range(100)], food = 1000)
     for _ in range(TICKS_PER_YEAR * 1000):
         s.step()
 
-    assert len(s.people) < 10000
+    assert 1000 > len(s.people) > 50
 
 
 

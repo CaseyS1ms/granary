@@ -19,6 +19,7 @@ class Person:
 
 
 
+
     def get_age_in_years(self, current_tick):
         return int((current_tick - self.birth_tick) / TICKS_PER_YEAR)
 
@@ -34,6 +35,7 @@ class Person:
         if self.health <= 0:
             self.alive = False
             print("person died")
+
 
 
     def can_reproduce(self,tick = 0):

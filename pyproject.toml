@@ -2,7 +2,9 @@
 name = "granary"
 version = "0.1.0"
 requires-python = ">=3.9"
-dependencies = []
+dependencies = [
+    "matplotlib>=3.9.4",
+]
 
 [dependency-groups]
 dev = [
