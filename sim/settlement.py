@@ -1,3 +1,7 @@
+import random
+
+from sim.person import Person
+
 from config import FOOD_PER_PERSON_PER_TICK, HUNGER_RELIEF_WHEN_FED, HUNGER_GAINED_PER_TICK_UNFED, \
     STARVATION_DAMAGE_PER_TICK
 
@@ -7,6 +11,7 @@ class Settlement:
     def __init__(self, people, food):
         self.food = food
         self.people = people
+        self.tick = 0
 
 
     @property
@@ -15,7 +20,10 @@ class Settlement:
 
 
 
-    def tick(self):
+    def step(self):
+
+        newborns = []
+
         for p in self.people:
 
             if p.hunger >= 100:
@@ -29,9 +37,16 @@ class Settlement:
             else:
                 p.increase_hunger()
 
+            if p.can_reproduce(self.tick):
+                newborns.append(Person(age = 0, gender = random.choice([1,2])))
 
-        people = [p for p in self.people if p.alive]
+
+
+
+        people = [p for p in self.people if p.alive] + newborns
         self.people = people
+
+        self.tick += 1
 
 
 
