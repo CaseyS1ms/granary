@@ -95,3 +95,11 @@ def test_person_ages_correctly():
         s.step()
     assert s.people[0].get_age_in_years(s.tick) > 20
 
+
+def test_settlement_produces_food():
+    s = Settlement(people = [Person(age = 20, gender = 1) for i in range(1)], food = 0)
+    for i in range(1):
+        s.step()
+        assert s.food > 0
+
+

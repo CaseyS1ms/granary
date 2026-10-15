@@ -12,6 +12,7 @@ class Person:
         self.health = 100
         self.gender = gender
         self.tick_last_reproduction = None
+        self.job = "farmer"
 
         self.birth_tick = tick - int(age * TICKS_PER_YEAR)
 
@@ -50,6 +51,10 @@ class Person:
                 return False
         else:
             return False
+
+
+
+
 
 
 
