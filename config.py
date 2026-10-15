@@ -1,0 +1,2 @@
+HOURS_PER_TICK = 24
+
