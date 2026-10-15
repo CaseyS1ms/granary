@@ -1,4 +1,4 @@
-import random
+
 
 from sim.person import Person
 
@@ -52,7 +52,7 @@ class Settlement:
 
 
             if p.can_reproduce(self.tick):
-                newborns.append(Person(gender = random.choice([1,2]), tick = self.tick, age = 0))
+                newborns.append(Person(gender = RNG.choice([1,2]), tick = self.tick, age = 0))
                 print("Newborn born")
 
 

@@ -1,7 +1,7 @@
 import random
 
 from config import HUNGER_RELIEF_WHEN_FED, HUNGER_GAINED_PER_TICK_UNFED, STARVATION_DAMAGE_PER_TICK, \
-    REPRODUCTION_COOLDOWN, TICKS_PER_YEAR
+    REPRODUCTION_COOLDOWN, TICKS_PER_YEAR, RNG
 
 
 class Person:
@@ -13,7 +13,7 @@ class Person:
         self.gender = gender
         self.tick_last_reproduction = None
         self.job = None
-        self.max_age = random.randint(70, 110)
+        self.max_age = RNG.randint(70, 110)
         self.birth_tick = tick - int(age * TICKS_PER_YEAR)
 
 

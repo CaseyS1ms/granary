@@ -1,3 +1,6 @@
+import random
+
+
 DAYS_PER_TICK = 1
 TICKS_PER_YEAR = 365 * DAYS_PER_TICK
 
@@ -13,3 +16,5 @@ REPRODUCTION_COOLDOWN = 90
 MIN_WORKING_AGE = 15
 MAX_WORKING_AGE = 65
 JOBS = ["farmer"]
+
+RNG = random.Random(33)

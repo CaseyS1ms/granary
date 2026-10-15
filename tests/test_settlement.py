@@ -1,6 +1,6 @@
 import pytest
 
-from config import REPRODUCTION_COOLDOWN
+from config import REPRODUCTION_COOLDOWN, RNG, TICKS_PER_YEAR
 from sim.person import Person
 from sim.settlement import Settlement
 
@@ -134,5 +134,15 @@ def test_person_does_not_get_job_when_too_old():
     s = Settlement(people = [Person(age = 66, gender = 1) for _ in range(1)], food = 0)
     s.step()
     assert s.people[0].job is None
+
+
+
+def test_long_run_test():
+    s = Settlement(people = [Person(age = RNG.randint(15,40), gender = RNG.randint(1,2)) for _ in range(1000)], food = 10000)
+    for _ in range(TICKS_PER_YEAR * 1000):
+        s.step()
+
+    assert len(s.people) < 10000
+
 
 
