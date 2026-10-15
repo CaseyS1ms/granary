@@ -13,7 +13,7 @@ class Person:
         self.gender = gender
         self.tick_last_reproduction = None
         self.job = None
-
+        self.max_age = random.randint(70, 110)
         self.birth_tick = tick - int(age * TICKS_PER_YEAR)
 
 

@@ -95,6 +95,12 @@ def test_person_ages_correctly():
         s.step()
     assert s.people[0].get_age_in_years(s.tick) > 20
 
+def test_person_dies_when_too_old():
+    s = Settlement(people = [Person(age = 20, gender = 1, tick = 0) for i in range(1)], food = 1000000000000)
+    for i in range(365 * 100):
+        s.step()
+    assert s.people == []
+
 
 def test_settlement_produces_food():
     s = Settlement(people = [Person(age = 20, gender = 1) for i in range(1)], food = 0)

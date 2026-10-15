@@ -26,6 +26,10 @@ class Settlement:
 
         for p in self.people:
 
+            if p.get_age_in_years(self.tick) > p.max_age:
+                p.alive = False
+                continue
+
             if p.get_age_in_years(self.tick) >= MIN_WORKING_AGE:
                 p.job = random.choice(JOBS)
             if p.get_age_in_years(self.tick) >= MAX_WORKING_AGE:
