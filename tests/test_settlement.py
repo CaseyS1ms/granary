@@ -6,7 +6,7 @@ from sim.settlement import Settlement
 
 @pytest.fixture
 def settlement():
-    return Settlement(people = [Person(age = 20, gender =  2, tick = 0) for i in range(10)], food = 10000)
+    return Settlement(people = [Person(age = 66, gender =  2, tick = 0) for i in range(10)], food = 10000)
 
 
 def test_settlement_init(settlement):
@@ -23,18 +23,18 @@ def test_eating_reduces_food(settlement):
     assert settlement.food == 9990
 
 def test_eating_more_food_than_available():
-    s = Settlement(people = [Person(age = 20,gender =  2, tick = 0) for i in range(100)], food = 100)
+    s = Settlement(people = [Person(age = 66,gender =  2, tick = 0) for i in range(100)], food = 100)
     s.step()
     assert (s.food == 0)
 
 def test_some_people_go_hungry_when_food_runs_out():
-    s = Settlement(people = [Person(age = 20, gender = 2, tick = 0) for i in range(10)], food = 6)
+    s = Settlement(people = [Person(age = 66, gender = 2, tick = 0) for i in range(10)], food = 6)
     s.step()
     hungry = [p for p in s.people if p.hunger > 0]
     assert len(hungry) == 4
 
 def test_starving_person_loses_health():
-    s = Settlement(people = [Person(age = 20, gender = 1, tick = 0) for i in range(1)], food = 0)
+    s = Settlement(people = [Person(age = 66, gender = 1, tick = 0) for i in range(1)], food = 0)
     for i in range(6):
         s.step()
     for p in s.people:
@@ -101,5 +101,32 @@ def test_settlement_produces_food():
     for i in range(1):
         s.step()
         assert s.food > 0
+
+def test_settlement_produces_food_when_hungry():
+    s = Settlement(people = [Person(age = 20, gender = 1) for _ in range(1)], food = 0)
+    s.people[0].hunger = 100
+    for i in range(10):
+        s.step()
+        assert s.food == 0
+
+
+def test_person_starts_with_no_job():
+    s = Settlement(people = [Person(age = 20, gender = 1) for _ in range(1)], food = 0)
+    assert s.people[0].job is None
+
+def test_person_gets_job_when_old_enough():
+    s = Settlement(people = [Person(age = 18, gender = 1) for _ in range(1)], food = 0)
+    s.step()
+    assert s.people[0].job is not None
+
+def test_person_does_not_get_job_when_too_young():
+    s = Settlement(people = [Person(age = 14, gender = 1) for _ in range(1)], food = 0)
+    s.step()
+    assert s.people[0].job is None
+
+def test_person_does_not_get_job_when_too_old():
+    s = Settlement(people = [Person(age = 66, gender = 1) for _ in range(1)], food = 0)
+    s.step()
+    assert s.people[0].job is None
 
 

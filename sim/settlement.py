@@ -2,8 +2,7 @@ import random
 
 from sim.person import Person
 
-from config import FOOD_PER_PERSON_PER_TICK, HUNGER_RELIEF_WHEN_FED, HUNGER_GAINED_PER_TICK_UNFED, \
-    STARVATION_DAMAGE_PER_TICK, FOOD_PRODUCED_PER_FARMER
+from config import *
 
 
 class Settlement:
@@ -18,9 +17,6 @@ class Settlement:
     def population(self):
         return sum(1 for p in self.people if p.alive)
 
-    @property
-    def amount_of_farmers(self):
-        return sum(1 for p in self.people if p.job == "farmer")
 
 
 
@@ -29,6 +25,12 @@ class Settlement:
         newborns = []
 
         for p in self.people:
+
+            if p.get_age_in_years(self.tick) >= MIN_WORKING_AGE:
+                p.job = random.choice(JOBS)
+            if p.get_age_in_years(self.tick) >= MAX_WORKING_AGE:
+                p.job = None
+
 
             if p.hunger >= 100:
                 p.take_damage(STARVATION_DAMAGE_PER_TICK)
