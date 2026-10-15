@@ -38,7 +38,8 @@ class Settlement:
                 p.increase_hunger()
 
             if p.can_reproduce(self.tick):
-                newborns.append(Person(age = 0, gender = random.choice([1,2])))
+                newborns.append(Person(gender = random.choice([1,2]), tick = self.tick, age = 0))
+                print("Newborn born")
 
 
 

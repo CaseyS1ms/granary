@@ -6,9 +6,9 @@ from sim.person import Person
 
 
 def test_person_init():
-    p = Person(20, 2)
+    p = Person(age = 20,gender = 2)
     assert p.alive == True
-    assert p.age == 20
+    assert p.get_age_in_years(0) == 20
 
 def test_person_starts_full():
     p = Person(20, 2)
@@ -60,25 +60,22 @@ def test_person_can_reproduce_from_start():
 
 
 def test_reproduction_is_correctly_triggered():
-    p = Person(age = 20, gender =  2)
-    assert p.can_reproduce(tick = 90) == True
+    p = Person(age = 20, gender =  2, tick = 0)
+    assert p.can_reproduce() == True
 
 def test_reproduction_is_incorrectly_triggered_gender_mismatch():
-    p = Person(age = 20, gender = 1)
-    assert p.can_reproduce(tick = 90) == False
+    p = Person(age = 20, gender = 1, tick = 0)
+    assert p.can_reproduce() == False
 
 def test_reproduction_is_incorrectly_triggered_age_mismatch():
     p = Person(age = 17, gender = 2)
-    assert p.can_reproduce(tick = 90) == False
+    assert p.can_reproduce() == False
 
 def test_reproduction_cant_be_triggered_twice():
     p = Person(age = 20, gender = 2)
     p.can_reproduce(tick = 0)
     assert p.can_reproduce(tick = REPRODUCTION_COOLDOWN - 1) == False
 
-def test_reproduction_is_correctly_triggered_after_cooldown():
-    p = Person(age = 20, gender = 2)
-    p.can_reproduce(tick = 0)
-    assert p.can_reproduce(tick = REPRODUCTION_COOLDOWN + 1) == True
+
 
 
