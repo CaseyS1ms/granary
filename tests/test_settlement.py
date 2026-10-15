@@ -39,8 +39,15 @@ def test_starving_person_loses_health(settlement):
     for p in s.people:
         assert p.health == 90
 
+
 def test_person_dies_when_health_is_0(settlement):
     s = Settlement(people = [Person(20) for i in range(1)], food = 0)
     for i in range(100):
         s.tick()
     assert s.people[0].alive == False
+
+def test_person_is_removed_from_settlement_when_dead(settlement):
+    s = Settlement(people = [Person(20) for i in range(1)], food = 0)
+    for i in range(100):
+        s.tick()
+    assert not s.people

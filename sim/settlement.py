@@ -30,6 +30,10 @@ class Settlement:
                 p.increase_hunger()
 
 
+        people = [p for p in self.people if p.alive]
+        self.people = people
+
+
 
 
 
