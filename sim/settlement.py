@@ -55,7 +55,7 @@ class Settlement:
         alive = [p for p in living if p.alive]
 
         # REPRODUCTION
-        newborns = [p for p in living if p.can_reproduce(tick)]
+        newborns = [p for p in living if p.can_reproduce(tick) and self._food_per_person() >= 3]
         self.people = alive + newborns
         self.plot()
         self.tick += 1
@@ -65,3 +65,7 @@ class Settlement:
         self.history["food"].append(self.food)
         self.history["population"].append(self.population)
         self.history["deaths"].append(self.deaths)
+
+
+    def _food_per_person(self):
+        return self.food / self.population
