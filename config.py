@@ -1,6 +1,5 @@
 import random
 
-
 DAYS_PER_TICK = 1
 TICKS_PER_YEAR = 365 * DAYS_PER_TICK
 

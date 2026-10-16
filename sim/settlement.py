@@ -1,7 +1,3 @@
-from turtledemo.clock import tick
-
-from sim.person import Person
-
 from config import *
 
 
