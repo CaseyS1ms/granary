@@ -17,3 +17,5 @@ MAX_WORKING_AGE = 65
 JOBS = ["farmer"]
 
 RNG = random.Random(33)
+
+BIRTH_CHANCE = 0.05

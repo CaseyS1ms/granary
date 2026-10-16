@@ -58,12 +58,14 @@ def test_persons_hunger_is_reset_when_fed():
     assert p.hunger == 0
 
 
-def test_person_can_reproduce_from_start():
+def test_person_can_reproduce_from_start(monkeypatch):
+    monkeypatch.setattr("sim.person.BIRTH_CHANCE", 1.0)
     p = Person(age=20, gender=2)
     assert p.can_reproduce(tick=0) == True
 
 
-def test_reproduction_is_correctly_triggered():
+def test_reproduction_is_correctly_triggered(monkeypatch):
+    monkeypatch.setattr("sim.person.BIRTH_CHANCE", 1.0)
     p = Person(age=20, gender=2, tick=0)
     assert p.can_reproduce() == True
 

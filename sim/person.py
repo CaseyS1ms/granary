@@ -1,5 +1,5 @@
 from config import HUNGER_RELIEF_WHEN_FED, HUNGER_GAINED_PER_TICK_UNFED, STARVATION_DAMAGE_PER_TICK, \
-    REPRODUCTION_COOLDOWN, TICKS_PER_YEAR, RNG
+    REPRODUCTION_COOLDOWN, TICKS_PER_YEAR, RNG, BIRTH_CHANCE
 
 
 class Person:
@@ -30,16 +30,10 @@ class Person:
             print("person died")
 
     def can_reproduce(self, tick=0):
-        if self.get_age_in_years(tick) >= 18 and self.gender == 2:
-            if self.hunger <= 50:
-                if self.tick_last_reproduction is None:
-                    self.tick_last_reproduction = tick
-                    return True
-                elif tick - self.tick_last_reproduction >= REPRODUCTION_COOLDOWN:
-                    self.tick_last_reproduction = tick
-                    return True
-                else:
-                    return False
+        if self.get_age_in_years(tick) >= 18 and self.gender == 2 and self.hunger <= 50 and RNG.random() < BIRTH_CHANCE:
+            if self.tick_last_reproduction is None or tick - self.tick_last_reproduction >= REPRODUCTION_COOLDOWN:
+                self.tick_last_reproduction = tick
+                return True
             else:
                 return False
         else:

@@ -63,27 +63,31 @@ def test_person_is_removed_from_settlement_when_dead():
     assert not s.people
 
 
-def test_reproduction_adds_new_people():
+def test_reproduction_adds_new_people(monkeypatch):
+    monkeypatch.setattr("sim.person.BIRTH_CHANCE", 1.0)
     s = Settlement(people=[Person(age=20, gender=2, tick=0) for i in range(10)], food=10000)
     for i in range(91):
         s.step()
     assert len(s.people) > 10
 
 
-def test_reproduction_only_happens_once():
+def test_reproduction_only_happens_once(monkeypatch):
+    monkeypatch.setattr("sim.person.BIRTH_CHANCE", 1.0)
     s = Settlement(people=[Person(age=20, gender=2, tick=0) for i in range(1)], food=10000)
     for i in range(5):
         s.step()
     assert len(s.people) == 2
 
 
-def test_reproduction_happens_on_first_tick():
+def test_reproduction_happens_on_first_tick(monkeypatch):
+    monkeypatch.setattr("sim.person.BIRTH_CHANCE", 1.0)
     s = Settlement(people=[Person(age=20, gender=2, tick=0) for i in range(1)], food=10000)
     s.step()
     assert len(s.people) == 2
 
 
-def test_reproduction_happens_after_cooldown():
+def test_reproduction_happens_after_cooldown(monkeypatch):
+    monkeypatch.setattr("sim.person.BIRTH_CHANCE", 1.0)
     s = Settlement(people=[Person(age=20, gender=2, tick=0) for i in range(1)], food=10000)
     for i in range(REPRODUCTION_COOLDOWN + 1):
         s.step()
