@@ -16,4 +16,4 @@ MIN_WORKING_AGE = 15
 MAX_WORKING_AGE = 65
 JOBS = ["farmer"]
 
-RNG = random.Random(42)
+RNG = random.Random(33)
