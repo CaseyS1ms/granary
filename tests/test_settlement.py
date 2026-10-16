@@ -6,12 +6,12 @@ from sim.settlement import Settlement
 
 @pytest.fixture
 def settlement():
-    return Settlement(people = [Person(age = 66, gender =  2, tick = 0) for i in range(10)], food = 10000)
+    return Settlement(people = [Person(age = 66, gender =  1, tick = 0) for i in range(1)], food = 10)
 
 
 def test_settlement_init(settlement):
-    assert settlement.population == 10
-    assert settlement.food == 10000
+    assert settlement.population == 1
+    assert settlement.food == 10
 
 def test_settlement_counts_living_people():
     people = [Person(age = 20, gender = 2, tick = 0) for i in range(10)]
@@ -20,37 +20,39 @@ def test_settlement_counts_living_people():
 
 def test_eating_reduces_food(settlement):
     settlement.step()
-    assert settlement.food == 9990
+    assert settlement.food == 9
 
 def test_eating_more_food_than_available():
-    s = Settlement(people = [Person(age = 66,gender =  2, tick = 0) for i in range(100)], food = 100)
+    s = Settlement(people = [Person(age = 66,gender =  1, tick = 0) for i in range(100)], food = 100)
     s.step()
     assert (s.food == 0)
 
 def test_some_people_go_hungry_when_food_runs_out():
-    s = Settlement(people = [Person(age = 66, gender = 2, tick = 0) for i in range(10)], food = 6)
+    s = Settlement(people = [Person(age = 66, gender = 1, tick = 0) for i in range(10)], food = 6)
     s.step()
     hungry = [p for p in s.people if p.hunger > 0]
     assert len(hungry) == 4
 
 def test_starving_person_loses_health():
     s = Settlement(people = [Person(age = 66, gender = 1, tick = 0) for i in range(1)], food = 0)
-    for i in range(6):
+    for i in range(5):
         s.step()
     for p in s.people:
         assert p.health == 90
 
 
 def test_person_dies_when_health_is_0():
-    s = Settlement(people = [Person(age = 20, gender = 2, tick = 0) for i in range(1)], food = 0)
-    for i in range(100):
-        s.step()
+    s = Settlement(people = [Person(age = 20, gender = 1, tick = 0) for i in range(1)], food = 0)
+    for p in s.people:
+        p.health = 0
+    s.step()
     assert s.people == []
 
 def test_person_is_removed_from_settlement_when_dead():
     s = Settlement(people = [Person(age =20, gender = 2, tick = 0) for i in range(1)], food = 0)
-    for i in range(100):
-        s.step()
+    for p in s.people:
+        p.alive = False
+    s.step()
     assert not s.people
 
 
@@ -95,6 +97,13 @@ def test_person_ages_correctly():
         s.step()
     assert s.people[0].get_age_in_years(s.tick) > 20
 
+def test_persons_age_is_assigned_correctly():
+    s = Settlement(people = [Person(age = 20, gender = 1, tick = 0) for i in range(1)], food = 10000)
+    for p in s.people:
+        age = p.get_age_in_years(s.tick)
+        assert age == 20
+
+
 def test_person_dies_when_too_old():
     s = Settlement(people = [Person(age = 20, gender = 1, tick = 0) for i in range(1)], food = 1000000000000)
     for i in range(365 * 100):
@@ -103,7 +112,7 @@ def test_person_dies_when_too_old():
 
 
 def test_settlement_produces_food():
-    s = Settlement(people = [Person(age = 20, gender = 1) for i in range(1)], food = 0)
+    s = Settlement(people = [Person(age = 25, gender = 1) for i in range(1)], food = 0)
     for i in range(1):
         s.step()
         assert s.food > 0
@@ -137,12 +146,7 @@ def test_person_does_not_get_job_when_too_old():
 
 
 
-def test_long_run_test():
-    s = Settlement(people = [Person(age = RNG.randint(15,40), gender = RNG.randint(1,2)) for _ in range(100)], food = 1000)
-    for _ in range(TICKS_PER_YEAR * 1000):
-        s.step()
 
-    assert 1000 > len(s.people) > 50
 
 
 

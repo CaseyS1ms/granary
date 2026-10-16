@@ -5,7 +5,7 @@ from config import RNG, TICKS_PER_YEAR
 from sim.settlement import Settlement
 from sim.person import Person
 
-settlement = Settlement(people = [Person(age = RNG.randint(15,60), gender = RNG.randint(1,2)) for i in range(100)], food = 1000)
+settlement = Settlement(people = [Person(age = RNG.randint(5,60), gender = RNG.randint(1,2)) for i in range(100)], food = 1000)
 
 for i in range(TICKS_PER_YEAR * 2):
     settlement.step()
@@ -29,6 +29,6 @@ axes[2].set_xlabel("Year")
 
 
 
-fig.suptitle("Granary: 1-year run (seed 33)")
+
 fig.tight_layout()
 plt.show()
