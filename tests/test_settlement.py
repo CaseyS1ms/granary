@@ -56,7 +56,7 @@ def test_person_dies_when_health_is_0():
 
 
 def test_person_is_removed_from_settlement_when_dead():
-    s = Settlement(people=[Person(age=20, gender=2, tick=0) for i in range(1)], food=0)
+    s = Settlement(people=[Person(age=20, gender=1, tick=0) for i in range(1)], food=0)
     for p in s.people:
         p.alive = False
     s.step()

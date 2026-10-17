@@ -4,6 +4,8 @@ from config import REPRODUCTION_COOLDOWN
 from sim.person import Person
 
 
+
+
 def test_person_init():
     p = Person(age=20, gender=2)
     assert p.alive == True
@@ -61,26 +63,36 @@ def test_persons_hunger_is_reset_when_fed():
 def test_person_can_reproduce_from_start(monkeypatch):
     monkeypatch.setattr("sim.person.BIRTH_CHANCE", 1.0)
     p = Person(age=20, gender=2)
-    assert p.can_reproduce(tick=0) == True
+    assert p.can_reproduce(tick=0, birth_factor= 1) == True
 
 
 def test_reproduction_is_correctly_triggered(monkeypatch):
     monkeypatch.setattr("sim.person.BIRTH_CHANCE", 1.0)
     p = Person(age=20, gender=2, tick=0)
-    assert p.can_reproduce() == True
+    assert p.can_reproduce(tick = 0, birth_factor= 1) == True
 
 
 def test_reproduction_is_incorrectly_triggered_gender_mismatch():
     p = Person(age=20, gender=1, tick=0)
-    assert p.can_reproduce() == False
+    assert p.can_reproduce(tick = 0, birth_factor= 1) == False
 
 
 def test_reproduction_is_incorrectly_triggered_age_mismatch():
     p = Person(age=17, gender=2)
-    assert p.can_reproduce() == False
+    assert p.can_reproduce(tick = 0, birth_factor= 1) == False
 
 
 def test_reproduction_cant_be_triggered_twice():
     p = Person(age=20, gender=2)
-    p.can_reproduce(tick=0)
-    assert p.can_reproduce(tick=REPRODUCTION_COOLDOWN - 1) == False
+    p.can_reproduce(tick=0, birth_factor = 1)
+    assert p.can_reproduce(tick=REPRODUCTION_COOLDOWN - 1, birth_factor=1) == False
+
+def test_reproduction_not_triggered_when_chance_is_0():
+    p = Person(age=20, gender=2)
+    assert p.can_reproduce(tick=0, birth_factor=0) == False
+
+def test_reproduction_triggered_when_chance_is_1(monkeypatch):
+    monkeypatch.setattr("sim.person.BIRTH_CHANCE", 1.0)
+    p = Person(age=20, gender=2)
+    assert p.can_reproduce(tick=0, birth_factor=1) == True
+

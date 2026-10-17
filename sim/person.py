@@ -29,13 +29,17 @@ class Person:
             self.alive = False
             print("person died")
 
-    def can_reproduce(self, tick=0):
+    def can_reproduce(self,birth_factor, tick=0, ):
         age = self.get_age_in_years(tick)
-        if MIN_FERTILE_AGE <= age <= MAX_FERTILE_AGE and self.gender == 2 and self.hunger <= 50 and RNG.random() < BIRTH_CHANCE:
+        if MIN_FERTILE_AGE <= age <= MAX_FERTILE_AGE and self.gender == 2 and self.hunger <= 50 and RNG.random() < BIRTH_CHANCE * birth_factor:
             if self.tick_last_reproduction is None or tick - self.tick_last_reproduction >= REPRODUCTION_COOLDOWN:
                 self.tick_last_reproduction = tick
+                # print(f"Person can reproduce with a birth factor of {birth_factor}")
                 return True
             else:
+                # print(f"Person can't reproduce yet, birth factor is {birth_factor}")
                 return False
+
         else:
+            # print(f"Person can't reproduce yet, birth factor is {birth_factor}")
             return False
