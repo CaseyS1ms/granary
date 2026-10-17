@@ -1,6 +1,7 @@
 import math
 
 from config import *
+from sim.person import Person
 
 
 class Settlement:
@@ -10,7 +11,8 @@ class Settlement:
         self.people = people
         self.tick = 0
         self.deaths = 0
-        self.history = {"tick": [], "food": [], "population": [], "deaths": []}
+        self.history = {"tick": [], "food": [], "population": [], "deaths": [], "farmers": []}
+
 
     @property
     def population(self):
@@ -23,8 +25,8 @@ class Settlement:
         tick = self.tick
 
         if self.tick % 365 == 0:
-            print(f"Year {self.tick // 365} - {self.population} people, number of years of food left - {math.floor(self._food_security())}, birth factor - {self._birth_factor(self._food_security(), F_LO, F_HI)}")
-
+            # print(f"Year {self.tick // 365} - {self.population} people, number of years of food left - {math.floor(self._food_security())}, birth factor - {self._birth_factor(self._food_security(), F_LO, F_HI)}")
+            pass
 
         # AGING, DEATH AND ONE TIME JOB ASSIGNMENT
         for p in self.people:
@@ -32,13 +34,26 @@ class Settlement:
             if age > p.max_age:
                 p.alive = False
                 self.deaths += 1
+                continue
 
             if p.health <= 0:
                 p.alive = False
                 self.deaths += 1
+                continue
+
+            if age > MAX_WORKING_AGE:
+                chance = CHANCE_OF_DEATH_ADULT_PER_TICK
+            else:
+                chance = CHANCE_OF_DEATH_CHILD_PER_TICK
+
+            if RNG.random() < chance:
+                p.alive = False
+                self.deaths += 1
+                continue
+
 
             if age >= MIN_WORKING_AGE and p.job is None:
-                p.job = random.choice(JOBS)
+                p.job = RNG.choice(JOBS)
             if age >= MAX_WORKING_AGE:
                 p.job = None
 
@@ -62,6 +77,9 @@ class Settlement:
 
             if p.hunger >= 100:
                 p.take_damage(STARVATION_DAMAGE_PER_TICK)
+                if not p.alive:
+                    self.deaths += 1
+                    continue
 
         alive = [p for p in living if p.alive]
 
@@ -69,7 +87,7 @@ class Settlement:
 
         factor = self._birth_factor(self._food_security(), F_LO, F_HI)
 
-        newborns = [p for p in living
+        newborns = [Person(gender = RNG.randint(1,2), tick = tick, age = 0) for p in alive
                         if p.can_reproduce(factor, tick)]
 
 
@@ -82,6 +100,7 @@ class Settlement:
         self.history["food"].append(self.food)
         self.history["population"].append(self.population)
         self.history["deaths"].append(self.deaths)
+        self.history["farmers"].append(len([p for p in self.people if p.job == "farmer"]))
 
 
     def _food_per_person(self):

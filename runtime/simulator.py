@@ -7,7 +7,7 @@ from sim.person import Person
 settlement = Settlement(people=[Person(age=RNG.randint(5, 60), gender=RNG.randint(1, 2)) for i in range(100)],
                         food=1000)
 
-for i in range(TICKS_PER_YEAR * 50):
+for i in range(TICKS_PER_YEAR * 200):
     settlement.step()
     if not settlement.people:
         break
@@ -18,6 +18,7 @@ years = [t / TICKS_PER_YEAR for t in h["tick"]]
 fig, axes = plt.subplots(3, 1, figsize=(10, 8), sharex=True)
 
 axes[0].plot(years, h["population"])
+axes[0].plot(years, h["farmers"], color="tab:orange")
 axes[0].set_ylabel("Population")
 
 axes[1].plot(years, h["food"], color="tab:green")

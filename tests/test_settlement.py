@@ -1,14 +1,19 @@
 import pytest
 
-from config import REPRODUCTION_COOLDOWN, RNG, TICKS_PER_YEAR
+
+from config import REPRODUCTION_COOLDOWN, RNG, TICKS_PER_YEAR, MAX_WORKING_AGE
 from sim.person import Person
 from sim.settlement import Settlement
 
 
 @pytest.fixture
 def settlement():
-    return Settlement(people=[Person(age=66, gender=1, tick=0) for i in range(1)], food=10)
+    return Settlement(people=[Person(age=MAX_WORKING_AGE + 1, gender=1, tick=0) for i in range(1)], food=10)
 
+@pytest.fixture
+def settlement_test_run():
+    s = [Settlement(people=[Person(age=RNG.randint(15,65), gender=RNG.randint(1,2), tick=0) for i in range(100)], food=1000) for _ in range(10)]
+    return s
 
 def test_settlement_init(settlement):
     assert settlement.population == 1
@@ -27,20 +32,20 @@ def test_eating_reduces_food(settlement):
 
 
 def test_eating_more_food_than_available():
-    s = Settlement(people=[Person(age=66, gender=1, tick=0) for i in range(100)], food=100)
+    s = Settlement(people=[Person(age=MAX_WORKING_AGE, gender=1, tick=0) for i in range(100)], food=100)
     s.step()
     assert (s.food == 0)
 
 
 def test_some_people_go_hungry_when_food_runs_out():
-    s = Settlement(people=[Person(age=66, gender=1, tick=0) for i in range(10)], food=6)
+    s = Settlement(people=[Person(age=MAX_WORKING_AGE + 1, gender=1, tick=0) for i in range(10)], food=6)
     s.step()
     hungry = [p for p in s.people if p.hunger > 0]
     assert len(hungry) == 4
 
 
 def test_starving_person_loses_health():
-    s = Settlement(people=[Person(age=66, gender=1, tick=0) for i in range(1)], food=0)
+    s = Settlement(people=[Person(age=MAX_WORKING_AGE, gender=1, tick=0) for i in range(1)], food=0)
     for i in range(5):
         s.step()
     for p in s.people:
@@ -160,6 +165,13 @@ def test_person_does_not_get_job_when_too_young():
 
 
 def test_person_does_not_get_job_when_too_old():
-    s = Settlement(people=[Person(age=66, gender=1) for _ in range(1)], food=0)
+    s = Settlement(people=[Person(age=MAX_WORKING_AGE + 1, gender=1) for _ in range(1)], food=0)
     s.step()
     assert s.people[0].job is None
+
+
+
+
+
+
+
